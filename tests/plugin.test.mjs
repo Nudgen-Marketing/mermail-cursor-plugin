@@ -61,6 +61,13 @@ test("marketplace-facing documentation exposes support and legal disclosures", a
   assert.match(result.readme, /Developer: Reload Window/);
 });
 
+test("local install instructions stay inside Cursor's plugin security boundary", async () => {
+  const result = await validatePlugin();
+
+  assert.match(result.readme, /git archive HEAD \| tar -x -C ~\/\.cursor\/plugins\/local\/mermail/);
+  assert.doesNotMatch(result.readme, /ln -s/);
+});
+
 test("tracked plugin content contains no embedded credentials or starter placeholders", async () => {
   const result = await validatePlugin();
 
