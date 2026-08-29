@@ -75,6 +75,19 @@ test("tracked plugin content contains no embedded credentials or starter placeho
   assert.deepEqual(result.placeholderFindings, []);
 });
 
+test("wallet references keep omitted live PayBox tools callable after an active probe", async () => {
+  const toolsReference = await fs.readFile(
+    path.join(repositoryRoot, "skills", "mermail-agent-wallet", "references", "tools.md"),
+    "utf8"
+  );
+
+  assert.doesNotMatch(toolsReference, /if so, say unavailable/i);
+  assert.match(
+    toolsReference,
+    /attempt .*paybox_request_transfer.*even if.*tools\/list.*omitted/is
+  );
+});
+
 test("validation reports malformed manifests, components, docs, and credentials", async (context) => {
   const fixture = await createFixture();
   context.after(() => fs.rm(fixture, { recursive: true, force: true }));
@@ -128,6 +141,7 @@ test("validation reports malformed manifests, components, docs, and credentials"
     [
       ["Your", "Org"].join(" "),
       ["mermail", "live", "abcdefghijklmnop"].join("_"),
+      ["sk", "proj", "abcdefghijklmnopqrstuvwxyz123456"].join("-"),
       ["-----BEGIN", "PRIVATE KEY-----"].join(" "),
       ["Authorization:", "Bearer", "abcdefghijklmnop"].join(" ")
     ].join("\n")
@@ -140,6 +154,6 @@ test("validation reports malformed manifests, components, docs, and credentials"
   assert.ok(result.errors.some((error) => error.includes("missing YAML frontmatter") || error.includes("frontmatter name")));
   assert.ok(result.errors.some((error) => error.includes("broken or unsafe link")));
   assert.ok(result.errors.some((error) => error.includes("production HTTPS endpoint")));
-  assert.equal(result.securityFindings.length, 3);
+  assert.equal(result.securityFindings.length, 4);
   assert.equal(result.placeholderFindings.length, 1);
 });
