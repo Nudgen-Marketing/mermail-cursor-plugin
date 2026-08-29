@@ -49,6 +49,7 @@ const PLACEHOLDERS = [
 ];
 const SECRET_PATTERNS = [
   { label: "Mermail API key", pattern: /mermail_(?:live|test)_[A-Za-z0-9_-]{16,}/g },
+  { label: "Mermail project API key", pattern: /\bsk-proj-[A-Za-z0-9_-]{12,}/g },
   { label: "private key", pattern: /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/g },
   { label: "literal bearer token", pattern: /Authorization["']?\s*[:=]\s*["']?Bearer\s+(?!\$\{|<|\[)[A-Za-z0-9._-]{16,}/gi }
 ];
