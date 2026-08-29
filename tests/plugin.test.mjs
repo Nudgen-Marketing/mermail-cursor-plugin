@@ -68,6 +68,17 @@ test("local install instructions stay inside Cursor's plugin security boundary",
   assert.doesNotMatch(result.readme, /ln -s/);
 });
 
+test("CI dependencies are pinned to immutable commit SHAs", async () => {
+  const workflow = await fs.readFile(
+    path.join(repositoryRoot, ".github", "workflows", "validate.yml"),
+    "utf8"
+  );
+
+  assert.doesNotMatch(workflow, /uses:\s+[^\s]+@v\d+\b/);
+  assert.match(workflow, /actions\/checkout@[a-f0-9]{40}/);
+  assert.match(workflow, /actions\/setup-node@[a-f0-9]{40}/);
+});
+
 test("tracked plugin content contains no embedded credentials or starter placeholders", async () => {
   const result = await validatePlugin();
 
