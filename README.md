@@ -20,10 +20,13 @@ No API key is stored in this plugin. Interactive Cursor installs authenticate di
 git clone https://github.com/Nudgen-Marketing/mermail-cursor-plugin.git
 cd mermail-cursor-plugin
 npm test
-ln -sfn "$(pwd)" ~/.cursor/plugins/local/mermail
+mkdir -p ~/.cursor/plugins/local/mermail
+git archive HEAD | tar -x -C ~/.cursor/plugins/local/mermail
 ```
 
 Run **Developer: Reload Window** in Cursor, open **Customize**, and confirm that Mermail's skills and MCP server appear. Select **Authenticate**, approve the intended workspace, then verify a read-only operation such as listing mailboxes. A marketplace installation with the same plugin name takes precedence over the local copy.
+
+Cursor restricts local plugins to files physically inside `~/.cursor/plugins/local`; on current releases, a symlink to a repository elsewhere on disk can be rejected. Re-run the `git archive` command after local changes.
 
 ## Included workflows
 
